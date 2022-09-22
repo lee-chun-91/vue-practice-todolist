@@ -1,20 +1,32 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <TodoHeader></TodoHeader>
+    <TodoInput></TodoInput>
+    <TodoList></TodoList>
+    <TodoFooter></TodoFooter>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld.vue';
+import { Component, Vue } from 'vue-property-decorator'
+import TodoHeader from "@/components/TodoHeader.vue";
+import TodoInput from "@/components/TodoInput.vue";
+import TodoList from "@/components/TodoList.vue";
+import TodoFooter from "@/components/TodoFooter.vue";
+
 
 @Component({
-  components: {
-    HelloWorld,
-  },
+  components: { TodoHeader, TodoInput, TodoList, TodoFooter },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  data() {
+    return {
+      // todolist 의 type 설정 및 적용 필요
+      listdata: [],
+    };
+  }
+  // addtodo 메서드 등록 필요
+}
 </script>
 
 <style>
@@ -24,6 +36,10 @@ export default class App extends Vue {}
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+body {
+  text-align: center;
+  background-color: azure;
 }
 </style>
