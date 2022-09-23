@@ -1,5 +1,6 @@
 <template>
   <section>
+    {{ parentMessage }}
     <ul>
       <li v-bind:key="todoItem" v-for="(todoItem, index) in todoItems">
         <span class="checkBox">
@@ -16,12 +17,15 @@
   </section>
 </template>
 
-<script>
-import { Component, Vue } from 'vue-property-decorator'
+<script lang="ts">
+import Vue from 'vue'
 
-@Component
-export default class TodoList extends Vue {
-  todoItems = [];
+export default Vue.extend({
+  data() {
+    return {
+      todoItems: [],
+    }
+  },
 
   created() {
     if (localStorage.length > 0) {
@@ -30,13 +34,17 @@ export default class TodoList extends Vue {
 
       }
     }
+  },
+
+  methods: {
+    removeTodo(todoItem, index) {
+      localStorage.removeItem(todoItem);
+      this.todoItems.splice(index, 1);
+    }
   }
 
-  removeTodo(todoItem, index) {
-    localStorage.removeItem(todoItem);
-    this.todoItems.splice(index, 1);
-  }
-}
+
+})
 </script>
 
 <style scoped>

@@ -5,14 +5,15 @@
 </template>
 
 <script>
-import { Component, Vue } from 'vue-property-decorator';
+import Vue from 'vue'
 
-@Component
-export default class TodoFooter extends Vue {
-  clearAllTodo() {
-    localStorage.clear();
+export default Vue.extend({
+  methods: {
+    clearAllTodo() {
+      localStorage.clear();
+    }
   }
-}
+})
 
 </script>
 

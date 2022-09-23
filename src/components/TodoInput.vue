@@ -11,23 +11,30 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import Vue from 'vue';
 
-@Component
-export default class TodoInput extends Vue {
-  newTodoItem = "";
+export default Vue.extend({
+  data() {
+    return {
+      newTodoItem: ""
+    }
+  },
 
-  addTodo() {
-    if (this.newTodoItem !== "") {
-      var value = this.newTodoItem && this.newTodoItem.trim();
-      localStorage.setItem(value, value);
-      this.clearInput();
+  methods: {
+    addTodo() {
+      if (this.newTodoItem !== "") {
+        let value = this.newTodoItem && this.newTodoItem.trim();
+        localStorage.setItem(value, value);
+        this.clearInput();
+      }
+    },
+    clearInput() {
+      this.newTodoItem = "";
     }
   }
-  clearInput() {
-    this.newTodoItem = "";
-  }
-}
+
+})
+
 </script>
 
 <style scoped>

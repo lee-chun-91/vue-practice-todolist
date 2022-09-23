@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import { Component, Vue } from 'vue-property-decorator'
 
-@Component
-export default class TodoHeader extends Vue {}
+import Vue from 'vue'
+
+export default Vue.extend({})
 
 </script>
 
