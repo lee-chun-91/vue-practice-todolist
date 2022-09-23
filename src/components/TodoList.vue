@@ -2,9 +2,14 @@
   <section>
     <ul>
       <li v-bind:key="todoItem" v-for="(todoItem, index) in todoItems">
-        <input type="checkbox" />
+        <span class="checkBox">
+           <input type="checkbox" />
+        </span>
         {{ todoItem }}
-        <button v-on:click="removeTodo(todoItem, index)"> 삭제 </button>
+        <span class="deleteButton">
+          <font-awesome-icon v-on:click="removeTodo(todoItem, index)" icon="fa-solid fa-trash" />
+        </span>
+
       </li>
 
     </ul>
@@ -38,13 +43,24 @@ export default class TodoList extends Vue {
 ul {
   list-style-type: none;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 li {
   display: flex;
+  width: 50%;
   min-height: 50px;
   height: 50px;
   line-height: 50px;
+  background: white;
+  margin: 0.5rem 0;
+  border-radius: 5px;
+}
+
+.deleteButton {
+  margin-left: 20px;
 }
 
 </style>
