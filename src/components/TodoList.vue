@@ -1,13 +1,14 @@
 <template>
   <section>
     <transition-group name="list" tag="ul">
-      <li :key="todoItem" v-for="(todoItem, index) in propsdata" >
+<!--      v-for 을 사용하는 경우 :key 값 더해주어야. 일단은 v-for 에서 제공하는 index 할당-->
+      <li :key="index" v-for="(todoItem, index) in propsdata" >
         <span class="checkBox">
            <input type="checkbox" />
         </span>
         {{ todoItem }}
         <span class="deleteButton">
-          <font-awesome-icon v-on:click="removeTodo(todoItem, index)" icon="fa-solid fa-trash" />
+          <font-awesome-icon @click="removeTodo(todoItem, index)" icon="fa-solid fa-trash" />
         </span>
       </li>
     </transition-group>
@@ -18,11 +19,15 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  props: ['propsdata'],
+  props: {
+    propsdata: {
+      type: [],
+    }
+  },
 
   methods: {
     removeTodo(todoItem:string, index: number) {
-      this.$emit('removeTodo', todoItem, index);
+      this.$emit('removeTodo', index);
     }
   }
 
@@ -37,6 +42,10 @@ export default Vue.extend({
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  input {
+    width: 20px;
   }
 
   li {

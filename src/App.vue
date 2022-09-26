@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <TodoHeader></TodoHeader>
-    <TodoInput :todo-item="todoText" @input="updateTodoText" @addTodo="addTodo" ></TodoInput>
-    <TodoList :propsdata="todoItems" v-on:removeTodo="removeTodo"></TodoList>
+    <TodoInput :todo-item="todoText" @input="updateTodoText" @addTodo="addTodoItem" ></TodoInput>
+    <TodoList :propsdata="todoItems" @removeTodo="removeTodoItem"></TodoList>
     <TodoFooter v-on:removeAll="clearAll"></TodoFooter>
   </div>
 </template>
@@ -15,12 +15,27 @@ import TodoList from "@/components/TodoList.vue";
 import TodoFooter from "@/components/TodoFooter.vue";
 
 
+// 할 일 등록
+const STORAGE_KEY = 'vue-todo-ts-v1'
+const storage = {
+  save(todoItems: any[]) {
+    const parsed = JSON.stringify(todoItems);
+    localStorage.setItem(STORAGE_KEY, parsed);
+  },
+  fetch() {
+    const todoItems = localStorage.getItem(STORAGE_KEY) || "[]";
+    const result = JSON.parse(todoItems);
+    return result;
+  }
+}
+
+
 export default Vue.extend({
   components: { TodoHeader, TodoInput, TodoList, TodoFooter },
   data() {
     return {
       todoText: "",
-      todoItems: []
+      todoItems: [] as any[]
     }
   },
 
@@ -29,12 +44,11 @@ export default Vue.extend({
       this.todoText = value;
     },
 
-    addTodo() {
-
-      const value = this.todoText
-
-      localStorage.setItem(value, value);
-      // this.todoItems.push(value);
+    addTodoItem() {
+      const value = this.todoText;
+      this.todoItems.push(value);
+      storage.save(this.todoItems);
+      // localStorage.setItem(value, value);
       this.initTodoText();
     },
 
@@ -42,24 +56,25 @@ export default Vue.extend({
       this.todoText = "";
     },
 
-    removeTodo(todoItem, index) {
-      localStorage.removeItem(todoItem);
+    removeTodoItem(index: number) {
+      console.log(index);
       this.todoItems.splice(index, 1);
+      storage.save(this.todoItems);
     },
 
     clearAll() {
       localStorage.clear();
       this.todoItems = [];
     },
+
+    fetchTodoItems() {
+      this.todoItems = storage.fetch();
+
+    }
   },
 
   created() {
-    if (localStorage.length > 0) {
-      for (var i = 0; i < localStorage.length; i++) {
-        this.todoItems.push(localStorage.key(i));
-
-      }
-    }
+    this.fetchTodoItems();
   },
 
 
