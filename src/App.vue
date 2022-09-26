@@ -2,7 +2,7 @@
   <div id="app">
     <TodoHeader></TodoHeader>
     <TodoInput :todo-item="todoText" @input="updateTodoText" @addTodo="addTodoItem" ></TodoInput>
-    <TodoList :propsdata="todoItems" @removeTodo="removeTodoItem"></TodoList>
+    <TodoList :propsdata="todoItems" @toggle="toggleTodoItemComplete" @removeTodo="removeTodoItem"></TodoList>
     <TodoFooter v-on:removeAll="clearAll"></TodoFooter>
   </div>
 </template>
@@ -14,28 +14,33 @@ import TodoInput from "@/components/TodoInput.vue";
 import TodoList from "@/components/TodoList.vue";
 import TodoFooter from "@/components/TodoFooter.vue";
 
+export interface Todo {
+  title: string;
+  done: boolean;
+}
+
 
 // 할 일 등록
 const STORAGE_KEY = 'vue-todo-ts-v1'
 const storage = {
-  save(todoItems: any[]) {
+  save(todoItems: Todo[]) {
     const parsed = JSON.stringify(todoItems);
     localStorage.setItem(STORAGE_KEY, parsed);
   },
+
   fetch() {
     const todoItems = localStorage.getItem(STORAGE_KEY) || "[]";
     const result = JSON.parse(todoItems);
     return result;
-  }
+  },
 }
-
 
 export default Vue.extend({
   components: { TodoHeader, TodoInput, TodoList, TodoFooter },
   data() {
     return {
       todoText: "",
-      todoItems: [] as any[]
+      todoItems: [] as Todo[]
     }
   },
 
@@ -46,7 +51,11 @@ export default Vue.extend({
 
     addTodoItem() {
       const value = this.todoText;
-      this.todoItems.push(value);
+      const todo: Todo = {
+        title: value,
+        done: false
+      }
+      this.todoItems.push(todo);
       storage.save(this.todoItems);
       // localStorage.setItem(value, value);
       this.initTodoText();
@@ -55,6 +64,10 @@ export default Vue.extend({
     initTodoText() {
       this.todoText = "";
     },
+
+    // toggleTodoItemComplete() {
+    //
+    // },
 
     removeTodoItem(index: number) {
       console.log(index);

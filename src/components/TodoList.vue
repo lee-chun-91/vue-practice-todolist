@@ -3,10 +3,12 @@
     <transition-group name="list" tag="ul">
 <!--      v-for 을 사용하는 경우 :key 값 더해주어야. 일단은 v-for 에서 제공하는 index 할당-->
       <li :key="index" v-for="(todoItem, index) in propsdata" >
-        <span class="checkBox">
-           <input type="checkbox" />
+<!--        <span class="checkBox">-->
+<!--           <input type="checkbox" />-->
+<!--        </span>-->
+        <span class="item complete" @click="toggleItem(todoItem, index)">
+           {{ todoItem }}
         </span>
-        {{ todoItem }}
         <span class="deleteButton">
           <font-awesome-icon @click="removeTodo(todoItem, index)" icon="fa-solid fa-trash" />
         </span>
@@ -16,17 +18,21 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, {PropType} from 'vue'
+import {Todo} from "@/App.vue";
 
 export default Vue.extend({
   props: {
     propsdata: {
-      type: [],
+      type: [] as PropType<Todo[]>,
     }
   },
 
   methods: {
-    removeTodo(todoItem:string, index: number) {
+    toggleItem() {
+      this.$emit("toggle", )
+    },
+    removeTodo(index: number) {
       this.$emit('removeTodo', index);
     }
   }
@@ -57,6 +63,14 @@ export default Vue.extend({
     background: white;
     margin: 0.5rem 0;
     border-radius: 5px;
+  }
+
+  .item {
+    cursor: pointer;
+  }
+
+  .complete {
+    text-decoration: line-through;
   }
 
   .deleteButton {
