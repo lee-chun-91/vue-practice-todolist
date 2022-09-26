@@ -1,8 +1,7 @@
 <template>
   <section>
-    {{ parentMessage }}
-    <ul>
-      <li v-bind:key="todoItem" v-for="(todoItem, index) in todoItems">
+    <transition-group name="list" tag="ul">
+      <li :key="todoItem" v-for="(todoItem, index) in propsdata" >
         <span class="checkBox">
            <input type="checkbox" />
         </span>
@@ -10,10 +9,8 @@
         <span class="deleteButton">
           <font-awesome-icon v-on:click="removeTodo(todoItem, index)" icon="fa-solid fa-trash" />
         </span>
-
       </li>
-
-    </ul>
+    </transition-group>
   </section>
 </template>
 
@@ -21,25 +18,11 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  data() {
-    return {
-      todoItems: [],
-    }
-  },
-
-  created() {
-    if (localStorage.length > 0) {
-      for (var i = 0; i < localStorage.length; i++) {
-        this.todoItems.push(localStorage.key(i));
-
-      }
-    }
-  },
+  props: ['propsdata'],
 
   methods: {
-    removeTodo(todoItem, index) {
-      localStorage.removeItem(todoItem);
-      this.todoItems.splice(index, 1);
+    removeTodo(todoItem:string, index: number) {
+      this.$emit('removeTodo', todoItem, index);
     }
   }
 
@@ -48,27 +31,27 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-ul {
-  list-style-type: none;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  ul {
+    list-style-type: none;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-li {
-  display: flex;
-  width: 50%;
-  min-height: 50px;
-  height: 50px;
-  line-height: 50px;
-  background: white;
-  margin: 0.5rem 0;
-  border-radius: 5px;
-}
+  li {
+    display: flex;
+    width: 50%;
+    min-height: 50px;
+    height: 50px;
+    line-height: 50px;
+    background: white;
+    margin: 0.5rem 0;
+    border-radius: 5px;
+  }
 
-.deleteButton {
-  margin-left: 20px;
-}
+  .deleteButton {
+    margin-left: 20px;
+  }
 
 </style>

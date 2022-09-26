@@ -1,19 +1,26 @@
 <template>
   <div class="container">
     <div class="inputBox shadow">
-      <input type="text" v-model="newTodoItem" placeholder="Type what you have to do"/>
+      <label for="todo-input">오늘 할 일 : </label>
+      <input id="todo-input" type="text" :value="todoItem" @input="handleInput" placeholder="Type what you have to do"/>
       <span class="addButton">
-      <font-awesome-icon icon="fa-solid fa-square-plus" v-on:click="addTodo" />
+      <font-awesome-icon icon="fa-solid fa-square-plus" @click="addTodo" />
     </span>
     </div>
   </div>
-
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 
 export default Vue.extend({
+  props: {
+    todoItem: {
+      type: String,
+      required: true
+    }
+  },
+
   data() {
     return {
       newTodoItem: ""
@@ -21,18 +28,22 @@ export default Vue.extend({
   },
 
   methods: {
-    addTodo() {
-      if (this.newTodoItem !== "") {
-        let value = this.newTodoItem && this.newTodoItem.trim();
-        localStorage.setItem(value, value);
-        this.clearInput();
+    handleInput(event: InputEvent) {
+      if (!event.target) {
+        return;
       }
+      const eventTarget = event.target as HTMLInputElement;
+      this.$emit("input", eventTarget.value); // !는 non-null assertion type
     },
+
+    addTodo() {
+        this.$emit('addTodo');
+    },
+
     clearInput() {
       this.newTodoItem = "";
     }
   }
-
 })
 
 </script>

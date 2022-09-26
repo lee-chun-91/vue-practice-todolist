@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <TodoHeader></TodoHeader>
-    <TodoInput v-on:addTodo="addTodo"></TodoInput>
-    <TodoList :parent-message="test1"></TodoList>
-    <TodoFooter></TodoFooter>
+    <TodoInput :todo-item="todoText" @input="updateTodoText" @addTodo="addTodo" ></TodoInput>
+    <TodoList :propsdata="todoItems" v-on:removeTodo="removeTodo"></TodoList>
+    <TodoFooter v-on:removeAll="clearAll"></TodoFooter>
   </div>
 </template>
 
@@ -19,16 +19,50 @@ export default Vue.extend({
   components: { TodoHeader, TodoInput, TodoList, TodoFooter },
   data() {
     return {
-      test1: "안녕",
+      todoText: "",
       todoItems: []
     }
   },
 
   methods: {
+    updateTodoText(value: string) {
+      this.todoText = value;
+    },
+
     addTodo() {
-      console.log("click addTodo");
+
+      const value = this.todoText
+
+      localStorage.setItem(value, value);
+      // this.todoItems.push(value);
+      this.initTodoText();
+    },
+
+    initTodoText() {
+      this.todoText = "";
+    },
+
+    removeTodo(todoItem, index) {
+      localStorage.removeItem(todoItem);
+      this.todoItems.splice(index, 1);
+    },
+
+    clearAll() {
+      localStorage.clear();
+      this.todoItems = [];
+    },
+  },
+
+  created() {
+    if (localStorage.length > 0) {
+      for (var i = 0; i < localStorage.length; i++) {
+        this.todoItems.push(localStorage.key(i));
+
+      }
     }
-  }
+  },
+
+
 
 })
 

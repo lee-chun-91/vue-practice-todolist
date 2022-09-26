@@ -1,6 +1,6 @@
 <template>
   <div class="clearAllContainer">
-    <span class="clearAllButton" v-on:click="clearAllTodo">Clear All</span>
+    <span class="clearAllButton" v-on:click="clearTodo">Clear All</span>
   </div>
 </template>
 
@@ -9,8 +9,8 @@ import Vue from 'vue'
 
 export default Vue.extend({
   methods: {
-    clearAllTodo() {
-      localStorage.clear();
+    clearTodo() {
+      this.$emit('removeAll');
     }
   }
 })
