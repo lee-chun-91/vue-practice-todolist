@@ -28,7 +28,7 @@ const storage = {
     localStorage.setItem(STORAGE_KEY, parsed);
   },
 
-  fetch() {
+  fetch(): Todo[] {
     const todoItems = localStorage.getItem(STORAGE_KEY) || "[]";
     const result = JSON.parse(todoItems);
     return result;
@@ -45,6 +45,18 @@ export default Vue.extend({
   },
 
   methods: {
+    fetchTodoItems() {
+      this.todoItems = storage.fetch().sort((a, b) => {
+        if (a.title < b.title) {
+          return -1;
+        }
+        if (a.title > b.title) {
+          return 1;
+        }
+        return 0;
+      });
+    },
+
     updateTodoText(value: string) {
       this.todoText = value;
     },
@@ -65,9 +77,12 @@ export default Vue.extend({
       this.todoText = "";
     },
 
-    // toggleTodoItemComplete() {
-    //
-    // },
+    toggleTodoItemComplete(todoItem: Todo, index: number) {
+      this.todoItems.splice(index, 1, {
+        ...todoItem, done: !todoItem.done
+      });
+      storage.save(this.todoItems);
+   },
 
     removeTodoItem(index: number) {
       console.log(index);
@@ -79,19 +94,11 @@ export default Vue.extend({
       localStorage.clear();
       this.todoItems = [];
     },
-
-    fetchTodoItems() {
-      this.todoItems = storage.fetch();
-
-    }
   },
 
   created() {
     this.fetchTodoItems();
-  },
-
-
-
+  }
 })
 
 </script>

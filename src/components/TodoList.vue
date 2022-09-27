@@ -6,10 +6,10 @@
 <!--        <span class="checkBox">-->
 <!--           <input type="checkbox" />-->
 <!--        </span>-->
-        <span class="item complete" @click="toggleItem(todoItem, index)">
-           {{ todoItem }}
+        <span class="item" :class="todoItemClass(todoItem)" @click="toggleItem(todoItem, index)">
+           {{ todoItem.title }}
         </span>
-        <span class="deleteButton">
+        <span class="removeButton">
           <font-awesome-icon @click="removeTodo(todoItem, index)" icon="fa-solid fa-trash" />
         </span>
       </li>
@@ -29,8 +29,12 @@ export default Vue.extend({
   },
 
   methods: {
-    toggleItem() {
-      this.$emit("toggle", )
+    todoItemClass(todoItem: Todo): string | null {
+      console.log(todoItem)
+      return todoItem.done ? "complete" : null
+    },
+    toggleItem(todoItem: Todo, index: number) {
+      this.$emit("toggle", todoItem, index)
     },
     removeTodo(index: number) {
       this.$emit('removeTodo', index);
@@ -73,7 +77,7 @@ export default Vue.extend({
     text-decoration: line-through;
   }
 
-  .deleteButton {
+  .removeButton {
     margin-left: 20px;
   }
 
